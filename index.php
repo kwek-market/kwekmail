@@ -57,6 +57,12 @@ if (isset($data->send_kwek_email)) {
     }else if($message_event == "forgot_password"){
         $link = $data->link;
         include('forgot_password.php');
+    }else if($message_event == "notification"){
+        $notification_title = $data->notification_title;
+        $name = $data->name;
+        $no_html_content = $data->no_html_content;
+        $html_content = $data->html_content;
+        include('notification.php');
     }
      else {
         $message = array(
