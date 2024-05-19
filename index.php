@@ -7,14 +7,8 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 $data = json_decode(file_get_contents("php://input"));
-function test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
 if (isset($data->send_kwek_email)) {
+    include_once("./helpers/helpers.php");
     include('variables.php');
     $email = test_input($data->email);
     $product_name = test_input($data->product_name);
@@ -22,8 +16,6 @@ if (isset($data->send_kwek_email)) {
     $from_email = test_input($data->from_email);
     $subject = test_input($data->subject);
     $message_event = $data->event;
-
-    
 
     if ($api_key != $main_api_key) {
         $message = array(
@@ -50,21 +42,20 @@ if (isset($data->send_kwek_email)) {
         $link = $data->link;
         $button_name = $data->link_keyword;
         include('email.php');
-    }else if($message_event == "email_verification"){
+    } else if ($message_event == "email_verification") {
         $link = $data->link;
         $name = $data->name;
         include('email_verification.php');
-    }else if($message_event == "forgot_password"){
+    } else if ($message_event == "forgot_password") {
         $link = $data->link;
         include('forgot_password.php');
-    }else if($message_event == "notification"){
+    } else if ($message_event == "notification") {
         $notification_title = $data->notification_title;
         $name = $data->name;
         $no_html_content = $data->no_html_content;
         $html_content = $data->html_content;
         include('notification.php');
-    }
-     else {
+    } else {
         $message = array(
             "status" => false,
             "message" => "Event Does not exist"
@@ -78,7 +69,7 @@ if (isset($data->send_kwek_email)) {
     $subject = $subject;
     $txt = $message_body;
     $headers = "";
-    $headers .= "CC: $email\r\n"; 
+    $headers .= "CC: $email\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
     $headers .= 'From: ' . $product_name . ' <' . $from_email . '>' . "\r\n";
