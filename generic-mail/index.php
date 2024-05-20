@@ -14,8 +14,8 @@ if (!isset($data->send_kwek_email)) {
 
 $encodedtemplate = returnIfNotExist($data, "email_template");
 $emails = returnIfNotExist($data, "emails");
-$cc = $data->cc;
-$bcc = $data->bcc;
+$cc = isset($data->cc) ? $data->cc : [];
+$bcc = isset($data->bcc) ? $data->bcc : [];
 $api_key = test_input(returnIfNotExist($data, "api_key"));
 $from_email = test_input(returnIfNotExist($data, "from_email"));
 $subject = test_input(returnIfNotExist($data, "subject"));
@@ -58,5 +58,6 @@ if (is_array($cc) && count($cc) > 0) {
 if (is_array($bcc) && count($bcc) > 0) {
     checkMails($bcc);
 }
+
 
 sendEmail($from_email, $subject, $decodedTemplate, $product_name, $emails, $cc, $bcc);
